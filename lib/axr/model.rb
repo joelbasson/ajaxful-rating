@@ -77,7 +77,6 @@ module AjaxfulRating # :nodoc:
         rate_by(user, dimension)
       else
         rates(dimension).build.rater = user
-        end
       end
       rate.stars = stars
       rate.save!
