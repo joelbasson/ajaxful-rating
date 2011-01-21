@@ -1,6 +1,7 @@
 module AjaxfulRating # :nodoc:
   class StarsBuilder # :nodoc:
     include AjaxfulRating::Locale
+    include AjaxfulRating::Errors
     
     attr_reader :rateable, :user, :options, :remote_options
     
@@ -11,7 +12,9 @@ module AjaxfulRating # :nodoc:
     end
     
     def show_value
-      if options[:show_user_rating]
+      if options[:value] > 0
+        return options[:value]
+      elsif options[:show_user_rating]
         rate = rateable.rate_by(user, options[:dimension]) if user
         rate ? rate.stars : 0
       else
@@ -31,7 +34,8 @@ module AjaxfulRating # :nodoc:
         :small => false,
         :show_user_rating => false,
         :force_static => false,
-        :current_user => (@template.current_user if @template.respond_to?(:current_user))
+        :current_user => (@template.current_user if @template.respond_to?(:current_user)),
+        :value => -1
       }.merge(options)
       
       @options[:small] = @options[:small].to_s == 'true'
@@ -43,8 +47,8 @@ module AjaxfulRating # :nodoc:
         :method => :post
       }.merge(remote_options)
       
-      if @remote_options[:url].nil?
-        rateable_name = ActionController::RecordIdentifier.singular_class_name(rateable)
+      if @remote_options[:url].nil? && @options[:force_static].to_s == 'false' && options[:value] < 0
+        rateable_name = ActiveModel::Naming.singular(rateable)
         url = "rate_#{rateable_name}_path"
         if @template.respond_to?(url)
           @remote_options[:url] = @template.send(url, rateable)
@@ -80,7 +84,7 @@ module AjaxfulRating # :nodoc:
         :zIndex => (rateable.class.max_stars + 2 - value).to_s
       })
       @template.content_tag(:li) do
-        if !options[:force_static] && (user && options[:current_user] == user &&
+        if options[:value] < 0 && !options[:force_static] && (user && options[:current_user] == user &&
           (!already_rated || rateable.axr_config[:allow_update]))
           link_star_tag(value, css_class)
         else
