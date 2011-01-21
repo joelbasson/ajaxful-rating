@@ -1,4 +1,4 @@
-class AjaxfulRatingGenerator < Rails::Generator::NamedBase
+class AjaxfulRatingGenerator < Rails::Generators::NamedBase
   def initialize(runtime_args, runtime_options = {})
     super
       
