@@ -1,4 +1,4 @@
-class AjaxfulRatingGenerator < Rails::Generators::NamedBase
+class AjaxfulRatingGenerator < Rails::Generator::NamedBase
   source_root File.expand_path('../templates', __FILE__)
   
   def manifest
