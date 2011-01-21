@@ -3,7 +3,7 @@ class AjaxfulRatingGenerator < Rails::Generators::NamedBase
   
   def install_files
     template 'model.rb', 'app/models/rate.rb'
-    copy_file 'migration.rb', 'db/migrate/create_rates.rb'
+    migration_template 'migration.rb', 'db/migrate/create_rates.rb'
     copy_file 'images/star.png', 'public/images/ajaxful_rating/star.png'
     copy_file 'images/star_small.png', 'public/images/ajaxful_rating/star_small.png'
     copy_file 'style.css', 'public/stylesheets/ajaxful_rating.css'
