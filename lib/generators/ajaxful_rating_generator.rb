@@ -1,11 +1,4 @@
 class AjaxfulRatingGenerator < Rails::Generators::NamedBase
-  def initialize(runtime_args, runtime_options = {})
-    super
-      
-    # if there's no user model
-    model_file = File.join('app/models', "#{file_path}.rb")
-    raise "User model (#{model_file}) must exits." unless File.exists?(model_file)
-  end
   
   def manifest
     record do |m|
